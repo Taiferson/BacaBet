@@ -4,725 +4,267 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BacaBet · IA que transforma apostas em lucro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        baca: {
+                            green: '#00ff9d',
+                            cyan: '#00d4ff',
+                            dark: '#0a0f1c',
+                            card: '#111827'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slight': 'bounce 2s infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary-green: #00ff9d;
-            --primary-blue: #00d4ff;
-            --dark-bg: #050505;
-            --card-bg: #111827;
-            --text-white: #ffffff;
-            --text-gray: #9ca3af;
-            --gradient-main: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
-            --glow: 0 0 20px rgba(0, 255, 157, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-white);
-            background-image: url('https://image.qwenlm.ai/public_source/342d857d-88c0-44f3-9b6b-b60a751c75fe/124a67a8d-ea33-46be-a150-a6c257432309.png');
+            background-color: #050505;
+            color: white;
+            overflow-x: hidden;
+        }
+        .bg-custom {
+            background-image: linear-gradient(to bottom, rgba(5, 5, 5, 0.85), rgba(5, 5, 5, 0.95)), url('https://image.qwenlm.ai/public_source/7d8d54d4-585d-4475-9597-c3bae0993ebf/1f4ff9549-e1b9-4259-b870-b1f90c4c9c79.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            background-blend-mode: multiply;
-            line-height: 1.6;
-            overflow-x: hidden;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header & Logo */
-        header {
-            padding: 30px 0;
-            text-align: center;
-            background: transparent;
-            position: relative;
-            z-index: 100;
-        }
-
-        .logo-wrapper {
-            position: relative;
-            display: inline-block;
-            padding: 10px;
-        }
-
-        .logo-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 280px;
-            height: 280px;
-            background: radial-gradient(circle, rgba(0, 255, 157, 0.15) 0%, rgba(0, 212, 255, 0.05) 50%, transparent 70%);
-            border-radius: 50%;
-            animation: glow-pulse 3s ease-in-out infinite;
-            z-index: -1;
-        }
-
-        .logo-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 320px;
-            height: 320px;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.08) 0%, transparent 60%);
-            border-radius: 50%;
-            animation: glow-pulse 3s ease-in-out infinite 0.5s;
-            z-index: -2;
-        }
-
-        @keyframes glow-pulse {
-            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-        }
-
-        .logo-container {
-            display: inline-block;
-            position: relative;
-        }
-
-        .logo-container img {
-            max-width: 240px;
-            height: auto;
-            display: block;
-            filter: drop-shadow(0 0 25px rgba(0, 255, 157, 0.5)) drop-shadow(0 0 50px rgba(0, 212, 255, 0.3));
-            animation: float-logo 4s ease-in-out infinite;
-            background: transparent;
-        }
-
-        @keyframes float-logo {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .logo-divider {
-            width: 200px;
-            height: 2px;
-            background: var(--gradient-main);
-            margin: 20px auto 0;
-            border-radius: 2px;
-            box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 40px 0 60px;
-            position: relative;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 200px;
-            background: radial-gradient(ellipse, rgba(0, 255, 157, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .hero h1 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 3rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            background: var(--gradient-main);
+        .text-gradient {
+            background: linear-gradient(to right, #00ff9d, #00d4ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 255, 157, 0.2);
         }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-gray);
-            margin-bottom: 30px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+        .neon-border {
+            box-shadow: 0 0 10px rgba(0, 255, 157, 0.2), inset 0 0 10px rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
         }
-
-        .highlight {
-            color: var(--primary-green);
-            font-weight: 800;
+        .neon-text {
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
         }
-
-        /* Free Entry Card */
-        .free-entry-card {
-            background: rgba(17, 24, 39, 0.9);
-            border: 1px solid var(--primary-blue);
-            border-radius: 16px;
-            padding: 30px;
-            margin: 40px auto;
-            max-width: 600px;
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
-            position: relative;
-            overflow: hidden;
+        .card-gradient {
+            background: linear-gradient(145deg, rgba(17, 24, 39, 0.9), rgba(10, 15, 28, 0.95));
+            backdrop-filter: blur(10px);
         }
-
-        .free-entry-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-main);
+        .btn-glow {
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            transition: all 0.3s ease;
         }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
+        .btn-glow:hover {
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+            transform: translateY(-2px);
         }
-
-        .badge {
-            background: rgba(0, 255, 157, 0.1);
-            color: var(--primary-green);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            border: 1px solid var(--primary-green);
+        .logo-glow {
+            filter: drop-shadow(0 0 20px rgba(0, 255, 157, 0.6));
+            animation: pulse-glow 2s ease-in-out infinite;
         }
-
-        .match-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .vs {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
-
-        .bet-details {
-            background: rgba(0,0,0,0.3);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .bet-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-
-        .bet-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .odd {
-            color: var(--primary-blue);
-            font-weight: 700;
-        }
-
-        /* Secret Section */
-        .secret-section {
-            text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(180deg, rgba(5,5,5,0) 0%, rgba(0, 255, 157, 0.05) 50%, rgba(5,5,5,0) 100%);
-            position: relative;
-        }
-
-        .secret-section::before {
-            content: '⚡';
-            position: absolute;
-            left: 10%;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 3rem;
-            opacity: 0.1;
-            color: var(--primary-green);
-        }
-
-        .secret-section::after {
-            content: '⚡';
-            position: absolute;
-            right: 10%;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 3rem;
-            opacity: 0.1;
-            color: var(--primary-green);
-        }
-
-        .secret-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 2rem;
-            color: var(--text-white);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .secret-subtitle {
-            color: var(--primary-green);
-            font-weight: 700;
-            margin-bottom: 30px;
-        }
-
-        /* Pricing */
-        .pricing-card {
-            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
-            border: 2px solid var(--primary-green);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            max-width: 500px;
-            margin: 0 auto 60px;
-            position: relative;
-            box-shadow: 0 0 40px rgba(0, 255, 157, 0.1);
-        }
-
-        .pricing-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: var(--gradient-main);
-            border-radius: 22px;
-            z-index: -1;
-            opacity: 0.3;
-            filter: blur(10px);
-        }
-
-        .discount-badge {
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            background: #ff0055;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: 800;
-            transform: rotate(5deg);
-            box-shadow: 0 5px 15px rgba(255, 0, 85, 0.4);
-            animation: shake 2s infinite;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: rotate(5deg); }
-            25% { transform: rotate(3deg); }
-            75% { transform: rotate(7deg); }
-        }
-
-        .price-old {
-            text-decoration: line-through;
-            color: var(--text-gray);
-            font-size: 1.2rem;
-        }
-
-        .price-new {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--primary-green);
-            line-height: 1;
-            margin: 10px 0;
-            text-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
-        }
-
-        .timer {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.5rem;
-            color: #ff0055;
-            font-weight: 700;
-            margin: 20px 0;
-            background: rgba(255, 0, 85, 0.1);
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 5px;
-        }
-
-        .cta-button {
-            display: block;
-            width: 100%;
-            padding: 20px;
-            background: var(--gradient-main);
-            color: #000;
-            font-weight: 800;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            text-decoration: none;
-            border-radius: 10px;
-            margin-top: 20px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
-            animation: pulse-btn 2s infinite;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px rgba(0, 255, 157, 0.6);
-        }
-
-        @keyframes pulse-btn {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(0, 255, 157, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 157, 0); }
-        }
-
-        .features {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: var(--text-gray);
-            flex-wrap: wrap;
-        }
-
-        .features span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* Results Table */
-        .results-section {
-            background: rgba(17, 24, 39, 0.95);
-            padding: 40px 20px;
-            border-radius: 20px;
-            margin-bottom: 60px;
-            border: 1px solid rgba(255,255,255,0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .results-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--gradient-main);
-        }
-
-        .section-title {
-            text-align: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            color: var(--text-white);
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
-        }
-
-        .result-item {
-            background: rgba(255,255,255,0.03);
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 3px solid var(--primary-green);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .result-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
-        }
-
-        .result-info h4 {
-            font-size: 1rem;
-            margin-bottom: 4px;
-        }
-
-        .result-info p {
-            font-size: 0.85rem;
-            color: var(--text-gray);
-        }
-
-        .result-profit {
-            color: var(--primary-green);
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .stats-summary {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .stats-highlight {
-            font-size: 1.5rem;
-            color: var(--primary-blue);
-            font-weight: 800;
-        }
-
-        /* Footer */
-        footer {
-            background: linear-gradient(180deg, rgba(5,5,5,0) 0%, #000 100%);
-            padding: 40px 0;
-            text-align: center;
-            border-top: 1px solid rgba(0, 255, 157, 0.2);
-        }
-
-        .footer-logo {
-            max-width: 120px;
-            margin-bottom: 20px;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-            filter: drop-shadow(0 0 15px rgba(0, 255, 157, 0.4));
-        }
-
-        .footer-logo:hover {
-            opacity: 1;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .footer-links a {
-            color: var(--text-white);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .footer-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-main);
-            transition: width 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-green);
-        }
-
-        .footer-links a:hover::after {
-            width: 100%;
-        }
-
-        .copyright {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
-
-        /* Decorative Elements */
-        .deco-line {
-            position: fixed;
-            width: 1px;
-            height: 100vh;
-            background: linear-gradient(180deg, transparent, rgba(0, 255, 157, 0.1), transparent);
-            z-index: -1;
-        }
-
-        .deco-line.left { left: 10%; }
-        .deco-line.right { right: 10%; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .price-new { font-size: 2.5rem; }
-            .match-info { flex-direction: column; gap: 10px; text-align: center; }
-            .result-item { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .logo-container img { max-width: 180px; }
-            .logo-wrapper::before { width: 220px; height: 220px; }
-            .logo-wrapper::after { width: 260px; height: 260px; }
-            .deco-line { display: none; }
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 255, 157, 0.6)); }
+            50% { filter: drop-shadow(0 0 30px rgba(0, 255, 157, 0.8)); }
         }
     </style>
 </head>
-<body>
+<body class="bg-custom font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- Decorative Lines -->
-    <div class="deco-line left"></div>
-    <div class="deco-line right"></div>
-
-    <header>
-        <div class="container">
-            <div class="logo-wrapper">
-                <div class="logo-container">
-                    <img src="https://image.qwenlm.ai/public_source/342d857d-88c0-44f3-9b6b-b60a751c75fe/1b7cfbf10-4fa7-4905-ad23-43c4a24b306c.png" alt="BacaBet Logo">
-                </div>
-            </div>
-            <div class="logo-divider"></div>
+    <!-- Header -->
+    <header class="w-full py-6 px-4 md:px-8 flex justify-center items-center max-w-7xl mx-auto">
+        <div class="flex items-center gap-4">
+            <img src="https://image.qwenlm.ai/public_source/7d8d54d4-585d-4475-9597-c3bae0993ebf/1f4ff9549-e1b9-4259-b870-b1f90c4c9c79.png" alt="BacaBet Logo" class="h-24 md:h-32 w-auto logo-glow">
         </div>
+        <a href="https://wa.me/5516993830355" class="hidden md:flex items-center gap-2 text-baca-green hover:text-white transition-colors font-semibold absolute right-8">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            Suporte
+        </a>
     </header>
 
-    <div class="container">
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-5xl">
+        
         <!-- Hero Section -->
-        <section class="hero">
-            <h1>Chega de perder dinheiro!</h1>
-            <p>Nossa IA acerta <span class="highlight">90%</span> e já fez mais de <span class="highlight">2.300 apostadores lucrarem</span>.</p>
-            
-            <!-- Free Entry Card -->
-            <div class="free-entry-card">
-                <div class="card-header">
-                    <span class="badge">Entrada Gratuita do Dia</span>
-                    <span style="color: var(--text-gray); font-size: 0.9rem;">Horário 17:00 (Brasília)</span>
-                </div>
-                
-                <div class="match-info">
-                    <span>Liverpool</span>
-                    <span class="vs">VS</span>
-                    <span>Galatasaray SK</span>
-                </div>
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+                Chega de <span class="text-red-500 line-through decoration-baca-green">perder dinheiro</span>!
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                Nossa IA acerta <span class="text-baca-green font-bold neon-text">90%</span> e já fez mais de <span class="text-baca-cyan font-bold">2.300 apostadores</span> lucrarem.
+            </p>
+        </div>
 
-                <div class="bet-details">
-                    <div class="bet-row">
-                        <span>Bolsa de Aposta: <strong>Liverpool Vence</strong></span>
-                        <span class="odd">Odd 1.30</span>
+        <!-- Free Entry Card -->
+        <div class="card-gradient neon-border rounded-2xl p-6 md:p-8 mb-16 max-w-4xl mx-auto relative overflow-hidden group">
+            <div class="absolute top-0 right-0 bg-baca-green text-black font-bold px-4 py-1 rounded-bl-lg text-sm">
+                ENTRADA GRATUITA DO DIA
+            </div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-left">
+                    <div class="flex items-center gap-2 text-baca-cyan mb-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="font-mono font-bold">Horário 17:00 (Brasília)</span>
                     </div>
-                    <div class="bet-row">
-                        <span>Bolsa de Aposta: <strong>Empate Sim</strong></span>
-                        <span class="odd">Odd 6.80</span>
+                    <div class="text-3xl font-bold text-white flex items-center gap-3">
+                        Liverpool <span class="text-gray-500 text-xl">VS</span> Galatasaray SK
                     </div>
                 </div>
-                
-                <div style="text-align: right; font-size: 0.8rem; color: var(--primary-blue);">
-                    ANALISADO PELA IA · 23:21:00
+
+                <div class="flex flex-col gap-3 w-full md:w-auto">
+                    <div class="bg-black/40 rounded-lg p-3 border border-gray-700 flex justify-between items-center min-w-[200px]">
+                        <span class="text-gray-400 text-sm">Bolsa de Aposta</span>
+                        <div class="text-right">
+                            <div class="font-bold text-white">Liverpool Vence</div>
+                            <div class="text-baca-green font-mono">Odd 1.30</div>
+                        </div>
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-3 border border-gray-700 flex justify-between items-center min-w-[200px]">
+                        <span class="text-gray-400 text-sm">Bolsa de Aposta</span>
+                        <div class="text-right">
+                            <div class="font-bold text-white">Empate Sim</div>
+                            <div class="text-baca-green font-mono">Odd 6.80</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <!-- Secret Section -->
-        <section class="secret-section">
-            <h2 class="secret-title">⚡ O Segredo que as Casas de Aposta não querem que você descubra ⚡</h2>
-            <p class="secret-subtitle">Resultados Comprovados Todos os Dias · 90%+ de Acerto</p>
-        </section>
-
-        <!-- Pricing Section -->
-        <section class="pricing-card">
-            <div class="discount-badge">49% OFF</div>
-            <p style="color: var(--text-gray); margin-bottom: 10px;">De <span style="text-decoration: line-through;">R$97</span> por</p>
-            <div class="price-new">R$49,90<span style="font-size: 1rem; color: var(--text-white); font-weight: 400;">/mês</span></div>
-            
-            <div class="timer" id="countdown">23:59:45</div>
-            
-            <p style="color: var(--primary-green); font-weight: 700; margin-bottom: 20px;">ÚLTIMAS 47 VAGAS COM DESCONTO · ACESSO IMEDIATO</p>
-            
-            <a href="https://invoice.infinitepay.io/plans/baccaginni/7SczjIY0uT" class="cta-button">
-                SIM, QUERO LUCRAR COM 90% DE ACERTO
-            </a>
-
-            <div class="features">
-                <span>🔒 Compra 100% segura</span>
-                <span>💳 Parcelamos em até 12x</span>
-                <span>🚀 Acesso imediato</span>
+            <div class="mt-4 text-right text-xs text-gray-500 font-mono">
+                ANALISADO PELA IA · <span id="live-clock">23:21:00</span>
             </div>
-        </section>
+        </div>
+
+        <!-- Offer Section -->
+        <div class="bg-gradient-to-b from-gray-900 to-black rounded-3xl p-1 mb-16 shadow-2xl shadow-baca-green/20">
+            <div class="bg-[#0f1525] rounded-[22px] p-8 md:p-12 text-center relative overflow-hidden">
+                <!-- Decorative glow -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-baca-green/10 to-transparent pointer-events-none"></div>
+                
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">⚡ O Segredo que as Casas de Aposta não querem que você descubra ⚡</h2>
+                <p class="text-baca-cyan font-semibold mb-8">Resultados Comprovados Todos os Dias · 90%+ de Acerto</p>
+
+                <div class="flex flex-col items-center justify-center mb-8">
+                    <div class="text-gray-400 line-through text-lg">De R$97</div>
+                    <div class="flex items-end gap-2">
+                        <span class="bg-baca-green text-black font-bold px-2 py-1 rounded text-sm mb-2">49% OFF</span>
+                        <span class="text-5xl md:text-6xl font-extrabold text-white">R$49,90<span class="text-xl text-gray-400 font-normal">/mês</span></span>
+                    </div>
+                </div>
+
+                <div class="mb-8 font-mono text-baca-green text-xl md:text-2xl font-bold bg-black/50 inline-block px-6 py-3 rounded-lg border border-baca-green/30">
+                    <span id="countdown">23:59:45</span>
+                </div>
+                <div class="text-red-400 font-bold mb-8 animate-pulse">ÚLTIMAS 47 VAGAS COM DESCONTO · ACESSO IMEDIATO</div>
+
+                <a href="https://invoice.infinitepay.io/plans/baccaginni/7SczjIY0uT" class="btn-glow w-full md:w-auto inline-block bg-gradient-to-r from-baca-green to-baca-cyan text-black font-extrabold text-xl py-5 px-10 rounded-full uppercase tracking-wide hover:scale-105 transition-transform">
+                    SIM, QUERO LUCRAR COM 90% DE ACERTO
+                </a>
+
+                <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+                    <span class="flex items-center gap-2"><svg class="w-4 h-4 text-baca-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg> Compra 100% segura</span>
+                    <span class="flex items-center gap-2"><svg class="w-4 h-4 text-baca-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg> Parcelamos em até 12x</span>
+                    <span class="flex items-center gap-2"><svg class="w-4 h-4 text-baca-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Acesso imediato</span>
+                </div>
+            </div>
+        </div>
 
         <!-- Results Section -->
-        <section class="results-section">
-            <h2 class="section-title">Últimos Jogos da IA</h2>
-            
-            <div class="results-grid">
-                <div class="result-item">
-                    <div class="result-info">
-                        <h4>Arsenal vs Everton</h4>
-                        <p>Casa Vence? SIM</p>
+        <div class="mb-16">
+            <h3 class="text-2xl font-bold text-center mb-8 text-white">Últimos Jogos da IA</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Card 1 -->
+                <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-4 hover:border-baca-green transition-colors">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-bold text-lg">Arsenal vs Everton</span>
+                        <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded">GREEN</span>
                     </div>
-                    <div class="result-profit">R$ 2.450</div>
+                    <div class="text-gray-400 text-sm mb-2">Casa Vence? SIM</div>
+                    <div class="text-baca-green font-mono font-bold text-xl">R$ 2.450</div>
                 </div>
-
-                <div class="result-item">
-                    <div class="result-info">
-                        <h4>Flamengo vs Palmeiras</h4>
-                        <p>Over 2.5 gols</p>
+                <!-- Card 2 -->
+                <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-4 hover:border-baca-green transition-colors">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-bold text-lg">Flamengo vs Palmeiras</span>
+                        <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded">GREEN</span>
                     </div>
-                    <div class="result-profit">R$ 1.870</div>
+                    <div class="text-gray-400 text-sm mb-2">Over 2.5 gols</div>
+                    <div class="text-baca-green font-mono font-bold text-xl">R$ 1.870</div>
                 </div>
-
-                <div class="result-item">
-                    <div class="result-info">
-                        <h4>Corinthians vs São Paulo</h4>
-                        <p>Under 3.5 gols</p>
+                <!-- Card 3 -->
+                <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-4 hover:border-baca-green transition-colors">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-bold text-lg">Corinthians vs São Paulo</span>
+                        <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded">GREEN</span>
                     </div>
-                    <div class="result-profit">R$ 3.210</div>
+                    <div class="text-gray-400 text-sm mb-2">Under 3.5 gols</div>
+                    <div class="text-baca-green font-mono font-bold text-xl">R$ 3.210</div>
                 </div>
-
-                <div class="result-item">
-                    <div class="result-info">
-                        <h4>Grêmio vs Internacional</h4>
-                        <p>Vencedor: Grêmio</p>
+                <!-- Card 4 -->
+                <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-4 hover:border-baca-green transition-colors">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-bold text-lg">Grêmio vs Internacional</span>
+                        <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded">GREEN</span>
                     </div>
-                    <div class="result-profit">R$ 1.520</div>
+                    <div class="text-gray-400 text-sm mb-2">Vencedor: Grêmio</div>
+                    <div class="text-baca-green font-mono font-bold text-xl">R$ 1.520</div>
                 </div>
-
-                <div class="result-item">
-                    <div class="result-info">
-                        <h4>Atlético-MG vs Cruzeiro</h4>
-                        <p>Total de cantos +9.5</p>
+                <!-- Card 5 -->
+                <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-4 hover:border-baca-green transition-colors">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-bold text-lg">Atlético-MG vs Cruzeiro</span>
+                        <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded">GREEN</span>
                     </div>
-                    <div class="result-profit">R$ 2.980</div>
+                    <div class="text-gray-400 text-sm mb-2">Total de cantos +9.5</div>
+                    <div class="text-baca-green font-mono font-bold text-xl">R$ 2.980</div>
+                </div>
+                <!-- Summary Card -->
+                <div class="bg-gradient-to-br from-baca-green/20 to-baca-cyan/20 border border-baca-green/50 rounded-xl p-4 flex flex-col justify-center items-center text-center">
+                    <div class="text-3xl font-bold text-white mb-1">9/10</div>
+                    <div class="text-baca-cyan text-sm font-bold uppercase mb-2">Acertos</div>
+                    <div class="text-xs text-gray-400">+R$ 12.030 lucro total</div>
                 </div>
             </div>
+        </div>
 
-            <div class="stats-summary">
-                <p style="color: var(--text-gray); margin-bottom: 5px;">9 acertos nos últimos 10 jogos</p>
-                <div class="stats-highlight">90% de precisão · +R$ 12.030 lucro total</div>
-            </div>
-        </section>
-    </div>
+    </main>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <img src="https://image.qwenlm.ai/public_source/342d857d-88c0-44f3-9b6b-b60a751c75fe/1b7cfbf10-4fa7-4905-ad23-43c4a24b306c.png" alt="BacaBet Logo" class="footer-logo">
-            <div class="footer-links">
-                <a href="https://instagram.com/baccaginn1" target="_blank">@baccaginn1</a>
-                <a href="https://wa.me/5516993830355" target="_blank">Suporte</a>
+    <footer class="bg-black py-8 border-t border-gray-900">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center items-center gap-2 mb-4">
+                 <img src="https://image.qwenlm.ai/public_source/7d8d54d4-585d-4475-9597-c3bae0993ebf/1f4ff9549-e1b9-4259-b870-b1f90c4c9c79.png" alt="BacaBet Logo" class="h-20 w-auto logo-glow">
             </div>
-            <p class="copyright">© 2025 BacaBet — Todos os direitos reservados.</p>
+            <div class="flex justify-center gap-6 mb-6">
+                <a href="https://instagram.com/baccaginn1" class="text-gray-400 hover:text-baca-green transition-colors flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    @baccaginn1
+                </a>
+                <a href="https://wa.me/5516993830355" class="text-gray-400 hover:text-baca-green transition-colors flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    Suporte
+                </a>
+            </div>
+            <p class="text-gray-600 text-sm">© 2025 BacaBet — Todos os direitos reservados.</p>
         </div>
     </footer>
 
     <script>
-        // Simple Countdown Timer Logic
-        function startTimer(duration, display) {
-            var timer = duration, hours, minutes, seconds;
+        // Countdown Timer Logic
+        function startCountdown(duration, display) {
+            let timer = duration, hours, minutes, seconds;
             setInterval(function () {
                 hours = parseInt(timer / 3600, 10);
                 minutes = parseInt((timer % 3600) / 60, 10);
@@ -740,10 +282,21 @@
             }, 1000);
         }
 
+        // Live Clock Logic
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR');
+            document.getElementById('live-clock').textContent = timeString;
+        }
+
         window.onload = function () {
-            var timeInSeconds = (23 * 60 * 60) + (59 * 60) + 45;
-            var display = document.querySelector('#countdown');
-            startTimer(timeInSeconds, display);
+            // Set countdown to roughly 24 hours for demo purposes or specific time
+            const twentyFourHours = 60 * 60 * 24; 
+            const display = document.querySelector('#countdown');
+            startCountdown(twentyFourHours, display);
+            
+            setInterval(updateClock, 1000);
+            updateClock();
         };
     </script>
 </body>
