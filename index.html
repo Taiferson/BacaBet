@@ -1,464 +1,563 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baca Bet - Análises Esportivas</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        neon: '#39ff14',
-                        dark: '#0a0a0a',
-                        card: '#121212',
-                        danger: '#ff3b3b',
-                        warning: '#ffd700'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'bounce-slow': 'bounce 2s infinite',
-                    }
-                }
-            }
-        }
-    </script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>BACCA-SNIPER | Elite Trading Esportivo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #03060C;
+            --card-dark: #0A0F1A;
+            --primary-glow: #00F0A8;
+            --primary-solid: #00E5A0;
+            --secondary-neon: #2B6EF0;
+            --danger-neon: #FF3860;
+            --gold-accent: #FFD166;
+            --text-main: #F1F5F9;
+            --text-muted: #8E9AAF;
+            --border-premium: rgba(0, 240, 168, 0.25);
+        }
+
         body {
-            background-color: #050505;
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .neon-text {
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
-        }
-        
-        .neon-border {
-            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+            background: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', 'Poppins', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        .glass-panel {
-            background: rgba(20, 20, 20, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(57, 255, 20, 0.1);
+        /* Background com grade premium */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 30%, rgba(0, 240, 168, 0.03) 2%, transparent 2.5%),
+                              repeating-linear-gradient(45deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 1px, transparent 1px, transparent 40px);
+            background-size: 35px 35px, 60px 60px;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #39ff14; 
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+            position: relative;
+            z-index: 2;
         }
 
-        .live-indicator {
+        /* Glassmorphism profissional */
+        .glass-premium {
+            background: rgba(10, 15, 26, 0.65);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(0, 240, 168, 0.2);
+            border-radius: 32px;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        /* Header + Efeito Sniper */
+        header {
+            padding: 80px 0 60px;
+            text-align: center;
             position: relative;
         }
-        .live-indicator::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 8px;
-            height: 8px;
-            background-color: #ff3b3b;
-            border-radius: 50%;
-            animation: pulse-red 1.5s infinite;
+
+        .sniper-logo {
+            display: inline-flex;
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: 6px;
+            cursor: pointer;
+            position: relative;
+            z-index: 30;
+            background: linear-gradient(135deg, #FFFFFF, var(--primary-solid), #A0FFE0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(0, 240, 168, 0.5);
         }
 
-        @keyframes pulse-red {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 59, 59, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 59, 59, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 59, 59, 0); }
+        .sniper-logo span {
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .bullet-tracer {
+            position: absolute;
+            width: 90px;
+            height: 8px;
+            background: linear-gradient(90deg, #FFD966, #FFA500, var(--primary-solid));
+            border-radius: 20px;
+            top: 50%;
+            left: -200px;
+            opacity: 0;
+            filter: blur(3px);
+            box-shadow: 0 0 35px var(--primary-solid);
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        /* Notas de dinheiro premium */
+        .money-rain {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 60px;
+            background: linear-gradient(145deg, #F5E7B2, #FFD966);
+            color: #1E2A1A;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: monospace;
+            letter-spacing: 1px;
+            backdrop-filter: blur(2px);
+            animation: moneyFall 2s cubic-bezier(0.3, 0.9, 0.4, 1.2) forwards;
+        }
+
+        @keyframes moneyFall {
+            0% {
+                transform: translateY(-20vh) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+                transform: translateY(10vh) rotate(12deg) scale(1);
+            }
+            100% {
+                transform: translateY(120vh) rotate(540deg) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        /* Badge animada */
+        .badge-premium {
+            background: linear-gradient(95deg, #FF3860, #FF8C42);
+            padding: 8px 24px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(255, 56, 96, 0.5);
+            animation: badgePulse 1.8s infinite;
+        }
+
+        @keyframes badgePulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 56, 96, 0.5); transform: scale(1);}
+            70% { box-shadow: 0 0 0 15px rgba(255, 56, 96, 0); transform: scale(1.02);}
+            100% { transform: scale(1);}
+        }
+
+        .headline-premium {
+            font-size: 3.6rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(125deg, #FFF, var(--primary-solid), var(--secondary-neon));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        /* Grid cards interativos */
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 35px;
+            margin: 70px 0;
+        }
+
+        .method-card {
+            background: rgba(8, 12, 22, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 38px 28px;
+            border: 1px solid rgba(0, 240, 168, 0.2);
+            transition: all 0.3s;
+            transform: translateY(0);
+        }
+
+        .method-card:hover {
+            border-color: var(--primary-solid);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 35px -15px rgba(0, 240, 168, 0.2);
+        }
+
+        /* Relatório scroll premium */
+        .report-premium {
+            background: #050A12;
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid rgba(0,240,168,0.2);
+        }
+        .report-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .operation-row {
+            display: grid;
+            grid-template-columns: 1fr 110px 100px;
+            padding: 14px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            transition: 0.15s;
+        }
+        .operation-row:hover {
+            background: rgba(0, 240, 168, 0.05);
+        }
+
+        /* Gráfico aprimorado */
+        .chart-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 32px;
+            padding: 28px;
+            margin: 50px 0;
+            border: 1px solid rgba(0,240,168,0.25);
+        }
+
+        /* CTA Betting Style */
+        .cta-betting {
+            background: radial-gradient(circle at 20% 10%, #0A1428, #020408);
+            border-radius: 56px;
+            padding: 80px 30px;
+            text-align: center;
+            border: 1px solid var(--primary-solid);
+            position: relative;
+            margin: 70px 0;
+            overflow: hidden;
+        }
+        .price-glitch {
+            font-size: 5.5rem;
+            font-weight: 900;
+            background: linear-gradient(145deg, #FFF, var(--primary-solid));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 18px rgba(0,240,168,0.6);
+        }
+        .cta-button-big {
+            background: linear-gradient(95deg, #00E5A0, #00B97C);
+            padding: 22px 65px;
+            font-size: 1.7rem;
+            font-weight: 800;
+            border-radius: 100px;
+            color: #03060C;
+            display: inline-flex;
+            gap: 18px;
+            margin-top: 35px;
+            transition: 0.25s;
+            box-shadow: 0 20px 35px rgba(0, 229, 160, 0.4);
+            text-decoration: none;
+        }
+        .cta-button-big:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 50px rgba(0, 229, 160, 0.7);
+        }
+
+        /* Floating Social */
+        .social-float {
+            position: fixed;
+            bottom: 35px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            z-index: 1200;
+        }
+        .social-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        @media (max-width: 800px) {
+            .container { padding: 0 20px; }
+            .headline-premium { font-size: 2.2rem; }
+            .sniper-logo { font-size: 2.5rem; }
+            .price-glitch { font-size: 3rem; }
+            .cta-button-big { font-size: 1.2rem; padding: 16px 30px; }
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col">
+<body>
 
-    <!-- Header -->
-    <header class="border-b border-gray-800 bg-dark/90 sticky top-0 z-50 backdrop-blur-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-chart-line text-neon text-2xl"></i>
-                <h1 class="text-2xl font-bold tracking-tighter text-white">BACA<span class="text-neon">BET</span></h1>
-            </div>
-            <a href="https://invoice.infinitepay.io/plans/baccaginni/7SczjIY0uT" target="_blank" class="hidden md:block bg-neon text-black font-bold py-2 px-6 rounded-full hover:bg-white transition-colors duration-300 shadow-[0_0_15px_rgba(57,255,20,0.4)]">
-                ASSINAR AGORA
-            </a>
-        </div>
+<div class="social-float">
+    <a href="https://instagram.com/baccaginn1" class="social-icon" style="background: linear-gradient(45deg, #f09433, #bc1888);"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/5516993830355" class="social-icon" style="background: #25d366;"><i class="fab fa-whatsapp"></i></a>
+</div>
+
+<div class="container">
+    <header>
+        <div class="bullet-tracer" id="sniperBullet"></div>
+        <div class="sniper-logo" id="logoElite">BACCA-SNIPER</div>
+        <p style="margin-top: 25px; font-weight: 500; color: var(--primary-solid); letter-spacing: 2px;">⚡ TAXA DE ACERTO 81.8% | EXATIDÃO MILIMÉTRICA ⚡</p>
     </header>
 
-    <!-- Hero Section -->
-    <section class="relative py-16 overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-10"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent"></div>
-        
-        <div class="container mx-auto px-4 relative z-10 text-center">
-            <span class="inline-block py-1 px-3 rounded-full bg-gray-800 border border-neon/30 text-neon text-xs font-bold mb-4 animate-pulse">
-                VAGAS LIMITADAS
-            </span>
-            <h2 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
-                ALAVANCAGEM DE <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-neon to-emerald-600 neon-text">BANCA PROFISSIONAL</span>
-            </h2>
-            <p class="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-                Tenha acesso às melhores análises do mercado. De <span class="line-through text-gray-500">R$ 97,00</span> por apenas <span class="text-neon font-bold text-2xl">R$ 49,90</span>.
-            </p>
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="https://invoice.infinitepay.io/plans/baccaginni/7SczjIY0uT" target="_blank" class="bg-neon text-black font-bold py-4 px-8 rounded-lg text-lg hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(57,255,20,0.5)]">
-                    GARANTIR MINHA VAGA <i class="fa-solid fa-arrow-right ml-2"></i>
-                </a>
-                <a href="https://t.me/BacaTrader" target="_blank" class="bg-gray-800 text-white border border-gray-700 font-bold py-4 px-8 rounded-lg text-lg hover:bg-gray-700 transition-colors duration-300 flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-telegram text-blue-400"></i> TELEGRAM FREE
-                </a>
+    <section>
+        <div style="text-align: center;">
+            <span class="badge-premium"><i class="fas fa-crown"></i> APENAS 12 VAGAS RESTANTES - PLANO ELITE</span>
+            <h1 class="headline-premium">O MÉTODO QUE AS <span style="color: #FF3860;">CASAS TEMEM</span> CHEGOU!</h1>
+            <p class="subheadline" style="max-width: 800px; margin: 25px auto; font-size: 1.2rem; color: #B8C7E7;">Pare de quebrar bancas tentando adivinhar. O <strong style="color: var(--primary-solid);">Bacca-Sniper</strong> é baseado em reagir ao jogo com inteligência logística de risco. Não é sorte, é o disparo certo no momento exato.</p>
+        </div>
+
+        <div class="method-grid">
+            <div class="method-card">
+                <i class="fas fa-crosshairs" style="font-size: 2.8rem; color: var(--primary-solid);"></i>
+                <h3 style="font-size: 1.7rem; margin: 15px 0;">Metodologia LPC Sniper</h3>
+                <p style="color: #ADBDD6;">Nossa técnica foca no Lay ao Placar Atual (LPC) após a confirmação de força de um time. Ignoramos o 0-0 e atacamos o lucro quando o cenário é de elite.</p>
             </div>
+            <div class="method-card">
+                <i class="fas fa-bullseye" style="font-size: 2.8rem; color: var(--primary-solid);"></i>
+                <h3 style="font-size: 1.7rem; margin: 15px 0;">Assertividade de 81.8%</h3>
+                <p>Nossos números de Abril mostram a força: de cada 10 disparos, 8 atingem o alvo. Uma relação Green/Red que blinda seu capital.</p>
+            </div>
+            <div class="method-card">
+                <i class="fas fa-shield-virus" style="font-size: 2.8rem; color: var(--primary-solid);"></i>
+                <h3 style="font-size: 1.7rem; margin: 15px 0;">Gestão Inquebrável</h3>
+                <p>Ensinamos como absorver um Red (que faz parte do jogo) sem comprometer sua banca, focando no longo prazo vencedor.</p>
+            </div>
+        </div>
+
+        <!-- GRÁFICO COM TOOLTIP PERFEITO -->
+        <div class="chart-container glass-premium">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 20px;">
+                <h2 style="font-size: 1.9rem;"><i class="fas fa-chart-line" style="color: var(--primary-solid);"></i> EVOLUÇÃO REAL DA BANCA</h2>
+                <span style="background: #0E1622; padding: 6px 18px; border-radius: 40px; font-weight: 500;">💰 Banca Inicial R$ 100 | Stake R$ 20</span>
+            </div>
+            <canvas id="bankChart" width="900" height="400" style="max-height: 400px; width: 100%;"></canvas>
+        </div>
+
+        <!-- RELATÓRIO DE OPERAÇÕES (TODAS AS 99) -->
+        <div class="report-premium" style="margin: 50px 0;">
+            <div class="report-header">
+                <h2><i class="fas fa-chart-simple"></i> ANÁLISES DE ABRIL (01/04 a 15/04)</h2>
+                <span style="color: var(--primary-solid);">🎯 99 OPERAÇÕES REAIS DOCUMENTADAS</span>
+            </div>
+            <div id="operationsList" style="max-height: 480px; overflow-y: auto;"></div>
         </div>
     </section>
 
-    <!-- Dashboard & Chart -->
-    <section class="py-12 bg-card border-y border-gray-800">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Stats Cards -->
-                <div class="lg:col-span-1 space-y-4">
-                    <div class="glass-panel p-6 rounded-xl border-l-4 border-neon">
-                        <p class="text-gray-400 text-sm uppercase tracking-wider">Banca Inicial</p>
-                        <h3 class="text-2xl font-bold text-white">R$ 100,00</h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-xl border-l-4 border-neon">
-                        <p class="text-gray-400 text-sm uppercase tracking-wider">Stake Média</p>
-                        <h3 class="text-2xl font-bold text-white">R$ 10,00</h3>
-                    </div>
-                    <div class="glass-panel p-6 rounded-xl border-l-4 border-neon">
-                        <p class="text-gray-400 text-sm uppercase tracking-wider">Lucro Total</p>
-                        <h3 id="totalProfitDisplay" class="text-2xl font-bold text-neon">R$ 0,00</h3>
-                    </div>
-                </div>
-
-                <!-- Chart -->
-                <div class="lg:col-span-2 glass-panel p-6 rounded-xl">
-                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-area text-neon"></i> Evolução de Banca
-                    </h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="bankrollChart"></canvas>
-                    </div>
-                </div>
+    <section class="cta-betting" id="ctaElite">
+        <div style="position: relative; z-index: 5;">
+            <h2 style="font-size: 2.6rem; font-weight: 800;">🚀 PARE DE PERDER DINHEIRO AGORA!</h2>
+            <p style="margin-top: 15px; font-size: 1.3rem; opacity: 0.9;">Garanta sua vaga na elite e comece a operar como um profissional.</p>
+            <div style="margin: 35px 0 15px;">
+                <p style="text-decoration: line-through; font-size: 1.8rem; color: #FF3860;">DE R$ 35,00</p>
+                <div class="price-glitch">R$ 19,90</div>
+                <p style="color: var(--primary-solid); font-weight: bold;">PLANO MENSAL VITALÍCIO*</p>
             </div>
+            <a href="https://invoice.infinitepay.io/plans/baccaginni/3pffykjZEV" class="cta-button-big"><i class="fas fa-crosshairs"></i> QUERO LUCRAR AGORA <i class="fas fa-arrow-right"></i></a>
+            <p style="margin-top: 40px; background: rgba(0,0,0,0.5); display: inline-block; padding: 6px 24px; border-radius: 60px;">✅ Acesso imediato: Grupo de Sinais </p>
         </div>
+        <div style="position: absolute; top: -80px; right: -60px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(0,240,168,0.2), transparent); filter: blur(70px);"></div>
     </section>
 
-    <!-- Results List -->
-    <section class="py-12">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold mb-8 text-center">ÚLTIMOS <span class="text-neon">RESULTADOS</span></h2>
-            
-            <div class="glass-panel rounded-xl overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gray-900 text-gray-400 text-sm uppercase tracking-wider">
-                                <th class="p-4 font-semibold">Partida</th>
-                                <th class="p-4 font-semibold text-right">Resultado</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resultsTableBody" class="divide-y divide-gray-800 text-sm md:text-base">
-                            <!-- Rows injected via JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Live Stream Card -->
-    <section class="py-8">
-        <div class="container mx-auto px-4">
-            <a href="https://streampro.top" target="_blank" class="block group">
-                <div class="glass-panel rounded-2xl p-8 relative overflow-hidden border border-neon/20 hover:border-neon transition-colors duration-300">
-                    <div class="absolute top-0 right-0 p-4">
-                        <span class="live-indicator bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">AO VIVO</span>
-                    </div>
-                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                        <div class="text-left">
-                            <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-neon transition-colors">Assista aos Jogos em Tempo Real</h3>
-                            <p class="text-gray-400">Acompanhe todas as ligas com alta qualidade e sem travamentos.</p>
-                        </div>
-                        <div class="bg-neon/10 p-4 rounded-full group-hover:bg-neon/20 transition-colors">
-                            <i class="fa-solid fa-play text-neon text-3xl"></i>
-                        </div>
-                    </div>
-                    <!-- Animated Background Elements -->
-                    <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-neon/10 rounded-full blur-3xl group-hover:bg-neon/20 transition-all duration-500"></div>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- Partners -->
-    <section class="py-12 bg-card border-t border-gray-800">
-        <div class="container mx-auto px-4">
-            <h3 class="text-center text-gray-500 text-sm uppercase tracking-widest mb-8">Casas de Aposta Parceiras</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <!-- BetEsporte -->
-                <a href="https://betesporte.bet.br/afl/Mestredabet" target="_blank" class="group block">
-                    <div class="bg-white rounded-lg p-4 flex items-center justify-center h-24 transition-transform group-hover:-translate-y-1">
-                        <img src="https://image.qwenlm.ai/public_source/9629f21d-0d02-4f4b-8c0f-1efd940114c6/18ee14e68-680c-49b0-a0c8-e4d797088c49.png" alt="BetEsporte" class="h-full object-contain">
-                    </div>
-                </a>
-                <!-- MasBets -->
-                <a href="https://masbets.net/?convite=BETBRASILPRO" target="_blank" class="group block">
-                    <div class="bg-white rounded-lg p-4 flex items-center justify-center h-24 transition-transform group-hover:-translate-y-1">
-                        <img src="https://image.qwenlm.ai/public_source/9629f21d-0d02-4f4b-8c0f-1efd940114c6/1ea9fd8de-6be8-4aa8-8e91-80f26a04f6b6.png" alt="MasBets" class="h-full object-contain">
-                    </div>
-                </a>
-                <!-- BetFair -->
-                <a href="https://abre.ai/btexchange" target="_blank" class="group block">
-                    <div class="bg-white rounded-lg p-4 flex items-center justify-center h-24 transition-transform group-hover:-translate-y-1">
-                        <img src="https://image.qwenlm.ai/public_source/9629f21d-0d02-4f4b-8c0f-1efd940114c6/160cf6456-e878-45d3-9914-a0d3e366580b.png" alt="BetFair" class="h-full object-contain">
-                    </div>
-                </a>
-                 </a>
-                <!-- FulltBet -->
-                <a href="https://abre.ai/fbexchange" target="_blank" class="group block">
-                    <div class="bg-white rounded-lg p-4 flex items-center justify-center h-24 transition-transform group-hover:-translate-y-1">
-                        <img src="https://fulltbet.bet.br/assets/logo-cover.png" alt="Fulltbet" class="h-full object-contain">
-                    </div>
-                </a>
-                <!-- Bolsa de Aposta -->
-                <a href="https://bolsadeaposta.bet.br" target="_blank" class="group block">
-                    <div class="bg-white rounded-lg p-4 flex items-center justify-center h-24 transition-transform group-hover:-translate-y-1">
-                        <img src="https://image.qwenlm.ai/public_source/9629f21d-0d02-4f4b-8c0f-1efd940114c6/17d81551c-de34-441c-a7b8-f585f71dbc5b.png" alt="Bolsa de Aposta" class="h-full object-contain">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-black py-12 border-t border-gray-900 mt-auto">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="text-center md:text-left">
-                    <h4 class="text-xl font-bold text-white mb-2">BACA<span class="text-neon">BET</span></h4>
-                    <p class="text-gray-500 text-sm">© 2024 Direitos reservados de BacaBet</p>
-                </div>
-                
-                <div class="flex gap-6">
-                    <a href="https://instagram.com/baccaginn1" target="_blank" class="text-gray-400 hover:text-neon transition-colors text-2xl">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-                    <a href="https://baccaprosites.com.br" target="_blank" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-1 border border-gray-800 px-3 py-1 rounded-full">
-                        Feito por BaccaDev <i class="fa-solid fa-code"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
+    <footer style="text-align: center; padding: 50px 0; border-top: 1px solid rgba(255,255,255,0.05); color: #5C6E8C;">
+        <p>© 2026 BACCA-SNIPER — Tecnologia de Precisão para Trading Esportivo. Todos os direitos reservados.</p>
     </footer>
+</div>
 
-    <!-- Floating WhatsApp -->
-    <a href="https://wa.me/5516993830355" target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform duration-300 flex items-center justify-center w-14 h-14">
-        <i class="fa-brands fa-whatsapp text-3xl"></i>
-    </a>
+<script>
+    // ========== DADOS COMPLETOS 99 OPERAÇÕES ==========
+    const fullOperations = [
+        ["Kolding IF vs Esbjerg", "13m", "1-1", 1], ["B93 Copenhagen vs Hobro IK", "12m", "0-2", 1], ["Colwyn Bay vs Caernarfon Town", "20m", "0-2", 1], ["Salford City vs Notts County", "10m", "2-1", 1], ["Blackpool vs Exeter", "12m", "1-0", 0], ["Boston Utd vs York", "15m", "1-0", 0], ["Forest Green vs Brackley", "23m", "4-0", 1], ["Boreham Wood vs Wealdstone", "25m", "5-1", 1], ["FC Eindhoven vs De Graafschap", "22m", "2-2", 1], ["Neuchatel Xamax vs FC Vaduz", "16m", "1-3", 1],
+        ["Waterford FC vs Shamrock Rovers", "16m", "1-1", 1], ["Rayo Vallecano vs Elche", "18m", "1-0", 0], ["Tlaxcala FC vs Dorados", "19m", "2-0", 1], ["Man City vs Liverpool", "36m", "4-0", 1], ["Hammarby vs Mjällby AIF", "12m", "3-0", 1], ["Hamburg vs Augsburg", "14m", "1-1", 1], ["Stenhousemuir vs Hamilton", "11m", "3-0", 1], ["Mallorca vs Real Madrid", "23m", "2-1", 1], ["Viktoria Plzen vs FK Teplice", "16m", "2-2", 1], ["Telstar vs FC Groningen", "21m", "0-2", 1],
+        ["Al Hilal vs Al Taawon", "27m", "2-2", 1], ["Southampton vs Arsenal", "25m", "2-1", 1], ["New York City vs St. Louis", "14m", "1-1", 1], ["Alianza FC vs CD Hercules", "27m", "3-2", 1], ["Fatih Karagumruk vs Rizespor", "12m", "2-1", 1], ["AIK vs Halmstad", "11m", "2-1", 1], ["Stromsgodset vs Stabaek", "39m", "2-1", 1], ["Al Okhdood vs Al Fateh", "20m", "1-0", 0], ["Westerlo vs Charleroi", "10m", "2-0", 1], ["Asane vs Moss", "10m", "2-3", 1],
+        ["Valerenga vs Viking FK", "31m", "1-0", 0], ["Exeter vs Doncaster", "11m", "3-0", 1], ["York vs Altrincham", "36m", "2-1", 1], ["Cambuur vs FC Dordrecht", "21m", "1-1", 1], ["Sarpsborg vs IK Start", "27m", "1-1", 1], ["Pogon Szczecin vs Legia", "13m", "0-2", 1], ["Bohemians vs Waterford", "33m", "1-1", 1], ["Pogon Grodzisk vs Stal", "15m", "1-2", 1], ["Casa Pia vs Benfica", "33m", "1-1", 1], ["Miedz Legnica vs Polonia", "20m", "1-1", 1],
+        ["Cottbus vs 1860 Munich", "15m", "3-0", 1], ["Nordsjaelland vs Brondby", "20m", "2-1", 1], ["Stade Lausanne vs Rapperswil", "31m", "1-2", 1], ["Real Madrid vs Bayern", "39m", "1-2", 1], ["Verl vs Hansa Rostock", "19m", "1-2", 1], ["Remo vs Amazonas", "20m", "1-0", 0], ["Lokomotiv Sofia vs Beroe", "11m", "2-1", 1], ["Damac vs Al Qadisiya", "33m", "1-1", 1], ["Wisla Plock vs Lechia", "22m", "1-0", 0], ["Taborsko vs Sparta B", "30m", "1-1", 1],
+        ["Al Orubah vs Al Faisaly", "29m", "1-0", 0], ["Den Bosch vs Cambuur", "37m", "1-1", 1], ["Frosinone vs Palermo", "21m", "1-1", 1], ["Colchester vs Swindon", "11m", "3-0", 1], ["Real Madrid vs Girona", "45m", "1-1", 1], ["Auckland vs Melbourne", "14m", "2-2", 1], ["OLS vs VJS Vantaa", "36m", "1-0", 1], ["Boreham Wood vs Hartlepool", "26m", "3-0", 1], ["Cardiff vs Bolton", "31m", "2-0", 1], ["TSV Havelse vs Saarbrucken", "31m", "2-0", 1],
+        ["Kazincbarcikai vs Ujpest", "11m", "0-3", 1], ["RB Leipzig vs M'gladbach", "30m", "1-0", 0], ["Hansa vs SSV Ulm", "22m", "5-1", 1], ["VVV vs De Graafschap", "27m", "3-3", 1], ["Rochdale vs Wealdstone", "20m", "2-1", 1], ["Liverpool vs Fulham", "26m", "2-0", 1], ["Kayserispor vs Fenerbahce", "18m", "0-4", 1], ["BW Linz vs Tirol", "13m", "5-0", 1], ["Ruch Chorzow vs Wieczysta", "22m", "0-2", 1], ["Estrela vs Sporting", "35m", "1-0", 0],
+        ["Timbers vs LAFC", "23m", "2-1", 1], ["FC Dallas vs St. Louis", "15m", "1-1", 1], ["FC Dordrecht vs ADO Den Haag", "16m", "1-0", 0], ["Sonderjyske vs Viborg", "17m", "0-2", 1], ["Polonia vs Wisla Krakow", "18m", "1-1", 1], ["Negeri Sembilan vs DPMM", "20m", "2-2", 1], ["Young Boys vs Servette", "40m", "1-1", 1], ["Chelsea vs Man City", "29m", "0-3", 1], ["Dender vs Zulte-Waregem", "11m", "1-2", 1], ["Maccabi Tel Aviv vs Beer Sheva", "17m", "1-3", 1],
+        ["1860 Munich vs Regensburg", "22m", "2-2", 1], ["Fram vs IA Akranes", "24m", "3-3", 1], ["Mineros vs Correcaminos", "24m", "3-1", 1], ["Vaajakoski vs JJK", "34m", "1-0", 0], ["Benevento vs Cavese", "10m", "1-0", 0], ["Apoel vs Apollon", "14m", "2-3", 1], ["FC Koper vs Maribor", "22m", "3-1", 1], ["Aldershot vs Southend", "24m", "0-2", 1], ["Southampton vs Blackburn", "17m", "3-0", 1], ["Abha vs Jeddah Club", "32m", "1-0", 0],
+        ["Slavia Prague B vs Jihlava", "11m", "1-0", 0], ["AC Oulu vs FF Jaro", "21m", "1-2", 1], ["Al Raed vs Al Orubah", "25m", "1-0", 0], ["Luton vs Northampton", "29m", "2-1", 1], ["Aurora vs Marquense", "10m", "1-0", 0], ["NY Red Bulls vs Riverhounds", "16m", "3-1", 1], ["Richmond vs Columbus Crew", "26m", "0-3", 1], ["Charlotte FC vs Independence", "36m", "6-0", 1], ["Millonarios vs Boston River", "28m", "1-0", 0]
+    ];
 
-    <!-- Scripts -->
-    <script>
-        // Raw Data Parsing
-        const rawData = [
-            { match: "US Cremonese x Inter Milan", val: 16.34 },
-            { match: "Tottenham x Man City", val: 10.20 },
-            { match: "Strasbourg x PSG", val: 5.34 },
-            { match: "RCD Mallorca x Sevilha FC", val: 5.16 },
-            { match: "Casa Pia x FC Porto", val: 65.25 },
-            { match: "Bologna FC x AC Milao", val: -4.92 },
-            { match: "Albacete Balompie x Barcelona", val: 8.22 },
-            { match: "The Straongest x DVO Tachira", val: 5.05 },
-            { match: "Inter de Milao x FC Torino", val: 6.83 },
-            { match: "Palmeiras x EC Vitória BA", val: -3.45 },
-            { match: "Remo x Mirassol", val: 9.21 },
-            { match: "Real Betis x Atlético Madrid", val: -6.40 },
-            { match: "Cruzeiro MG x Coritiba", val: 25.64 },
-            { match: "SC Telstar x Go Ahead Eagles", val: 24.65 },
-            { match: "Leeds United x Nottingham Forest", val: -3.97 },
-            { match: "Celta de Vigo x CA Osasuna", val: 6.63 },
-            { match: "FC Barcelona x RCD Mallorca", val: 2.00 },
-            { match: "Wolverhampton x Chelsea FC", val: -6.59 },
-            { match: "Sassuolo Calcio x Inter Milan", val: -3.69 },
-            { match: "Vasco da Gama x Botafogo", val: 2.97 },
-            { match: "Atalanta x US Cremonese", val: 19.31 },
-            { match: "Sheffield United FC x Middlesbrough FC", val: 10.40 },
-            { match: "CF Villarreal x Espanyol", val: -4.68 },
-            { match: "Man City x Fulham FC", val: -6.38 },
-            { match: "Bayern de Munique x RB Leipzig", val: 5.35 },
-            { match: "Mirassol x Cruzeiro MG", val: 20.69 },
-            { match: "Atlético MG x Remo", val: 4.78 },
-            { match: "Borussia Dortmund x FSV Mainz", val: 10.42 },
-            { match: "SC Pisa x AC Milao", val: -3.75 }, // Taken last value from +19.88 -3.75
-            { match: "Hoffenheim x Freiburg", val: 7.57 },
-            { match: "Como 1907 x ACF Fiorentina", val: 6.24 },
-            { match: "Olym.Lyon x Nice", val: 2.48 },
-            { match: "Santos x Velo Clube", val: -5.84 },
-            { match: "Napoli x AS Roma", val: 7.43 },
-            { match: "Fluminense x Bangu", val: 1.86 },
-            { match: "Galatasaray x Juventus", val: 69.21 },
-            { match: "Olumpiakos FC x B.Leverkusen", val: 2.87 },
-            { match: "D.Zagreb x Genk", val: 15.69 },
-            { match: "Fenerbahce x N.Forest", val: -5.01 },
-            { match: "US Sassuolo x H.Verona FC", val: -2.89 },
-            { match: "Brest. Olymp.Marselha", val: 17.72 },
-            { match: "Palmeiras x Capivariano", val: -10.00 },
-            { match: "Tottenham x Arsenal", val: -4.32 },
-            { match: "Flamengo x Madureira", val: 2.74 },
-            { match: "Atl.Madrid x C.Brugge", val: 10.87 },
-            { match: "I.Milão x B.Glimt", val: 4.16 },
-            { match: "Huachipato x Carabobo FC", val: 8.81 },
-            { match: "Juventus x Galatasaray", val: -2.05 },
-            { match: "N.Forest x Fenerbahce", val: 8.81 },
-            { match: "FC Celje x KF Drita", val: 2.14 },
-            { match: "Ferencvarosi x Ludogorets", val: 13.17 },
-            { match: "Santos FC x Vasco da Gama", val: 17.13 },
-            { match: "Flamengo x CA Lanús", val: 3.17 },
-            { match: "Barcelona x Villarreal", val: -0.43 },
-            { match: "Galatasaray x Alanyaspor", val: 12.87 },
-            { match: "B.Dortmund x B.Munique", val: 3.53 },
-            { match: "Newcastle x Everton", val: 34.32 }
-        ];
-
-        // Calculate Bankroll Evolution
-        let currentBank = 100.00;
-        const bankrollHistory = [100];
-        const labels = ["Start"];
-        let totalProfit = 0;
-
-        rawData.forEach((item, index) => {
-            currentBank += item.val;
-            totalProfit += item.val;
-            bankrollHistory.push(currentBank);
-            labels.push(`Jogo ${index + 1}`);
-        });
-
-        // Update Total Profit Display
-        const profitEl = document.getElementById('totalProfitDisplay');
-        profitEl.innerText = `R$ ${totalProfit.toFixed(2)}`;
-        profitEl.className = `text-2xl font-bold ${totalProfit >= 0 ? 'text-neon' : 'text-danger'}`;
-
-        // Render Table
-        const tableBody = document.getElementById('resultsTableBody');
-        rawData.forEach(item => {
-            const row = document.createElement('tr');
-            row.className = "hover:bg-gray-800/50 transition-colors";
-            
-            let profitClass = "";
-            let profitColor = "";
-            
-            if (item.val > 0) {
-                profitClass = "text-neon font-bold";
-                profitColor = "text-neon";
-            } else if (item.val < 0) {
-                profitClass = "text-danger font-bold";
-                profitColor = "text-danger";
-            } else {
-                profitClass = "text-warning font-bold";
-                profitColor = "text-warning";
-            }
-
-            row.innerHTML = `
-                <td class="p-4 text-gray-300">${item.match}</td>
-                <td class="p-4 text-right ${profitColor}">
-                    ${item.val > 0 ? '+' : ''}${item.val.toFixed(2)}
-                </td>
-            `;
-            tableBody.appendChild(row);
-        });
-
-        // Render Chart
-        const ctx = document.getElementById('bankrollChart').getContext('2d');
+    // Calcular banca e popular lista
+    let balance = 100;
+    let balanceHistory = [100];
+    const listContainer = document.getElementById('operationsList');
+    
+    fullOperations.forEach((op, idx) => {
+        const isGreen = op[3] === 1;
+        if (isGreen) balance += 12.5;
+        else balance -= 20;
+        balanceHistory.push(parseFloat(balance.toFixed(2)));
         
-        // Create gradient
-        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(57, 255, 20, 0.5)');
-        gradient.addColorStop(1, 'rgba(57, 255, 20, 0.0)');
+        const row = document.createElement('div');
+        row.className = 'operation-row';
+        row.innerHTML = `
+            <div><i class="fas fa-futbol" style="margin-right: 12px; color:#A0D0FF;"></i> ${op[0]} <span style="color:#6A7B9E; font-size:0.75rem;">(${op[1]})</span></div>
+            <div style="font-weight: 700; ${isGreen ? 'color: #00E5A0; text-shadow: 0 0 2px #00E5A0;' : 'color: #FF3860;'}">${isGreen ? '✅ GREEN' : '❌ RED'}</div>
+            <div style="text-align: right; font-family: monospace;">${op[2]}</div>
+        `;
+        listContainer.appendChild(row);
+    });
 
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Banca (R$)',
-                    data: bankrollHistory,
-                    borderColor: '#39ff14',
-                    backgroundColor: gradient,
-                    borderWidth: 2,
-                    pointRadius: 0,
-                    pointHoverRadius: 6,
-                    fill: true,
-                    tension: 0.4
-                }]
+    // GRÁFICO INTERATIVO COM TOOLTIP PERFEITO (mostrando valor em R$)
+    const chartCanvas = document.getElementById('bankChart').getContext('2d');
+    const chart = new Chart(chartCanvas, {
+        type: 'line',
+        data: {
+            labels: fullOperations.map((_, i) => i+1),
+            datasets: [{
+                label: 'Saldo da Banca (R$)',
+                data: balanceHistory,
+                borderColor: '#00F0A8',
+                backgroundColor: (ctx) => {
+                    const grad = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
+                    grad.addColorStop(0, 'rgba(0, 240, 168, 0.35)');
+                    grad.addColorStop(1, 'rgba(0, 240, 168, 0.02)');
+                    return grad;
+                },
+                fill: true,
+                tension: 0.3,
+                borderWidth: 3,
+                pointRadius: 0,
+                pointHoverRadius: 8,
+                pointHoverBackgroundColor: '#FFD966',
+                pointHoverBorderColor: '#FFF',
+                pointHoverBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                tooltip: {
+                    backgroundColor: '#0A0F1A',
+                    titleColor: '#00F0A8',
+                    bodyColor: '#F1F5F9',
+                    borderColor: '#00F0A8',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: (context) => `💰 Valor da Banca: R$ ${context.raw.toFixed(2)}`,
+                        title: (items) => `Operação #${items[0].label}`
+                    }
+                },
+                legend: { display: false }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        backgroundColor: 'rgba(20, 20, 20, 0.9)',
-                        titleColor: '#fff',
-                        bodyColor: '#39ff14',
-                        borderColor: '#333',
-                        borderWidth: 1
-                    }
-                },
-                scales: {
-                    x: {
-                        display: false
-                    },
-                    y: {
-                        grid: {
-                            color: '#333'
-                        },
-                        ticks: {
-                            color: '#888'
-                        }
-                    }
-                },
-                interaction: {
-                    mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
-                }
+            scales: {
+                x: { ticks: { display: false }, grid: { display: false } },
+                y: { ticks: { color: '#9AAEC5', callback: (val) => 'R$ ' + val }, grid: { color: 'rgba(255,255,255,0.05)' } }
             }
+        }
+    });
+
+    // ========== EFEITO SNIPER + VAPORIZAÇÃO E CHUVA DE DINHEIRO ==========
+    const logo = document.getElementById('logoElite');
+    const bullet = document.getElementById('sniperBullet');
+
+    function spawnRain(amount = 18) {
+        for (let i = 0; i < amount; i++) {
+            const value = ['R$10', 'R$20', 'R$50', 'R$100', 'R$200'][Math.floor(Math.random() * 5)];
+            const moneyDiv = document.createElement('div');
+            moneyDiv.className = 'money-rain';
+            moneyDiv.innerHTML = `<i class="fas fa-money-bill-wave"></i> ${value}`;
+            moneyDiv.style.left = Math.random() * 95 + 2 + '%';
+            moneyDiv.style.animationDuration = 1.4 + Math.random() * 1.5 + 's';
+            moneyDiv.style.fontWeight = 'bold';
+            document.body.appendChild(moneyDiv);
+            setTimeout(() => moneyDiv.remove(), 2200);
+        }
+    }
+
+    function vaporizeLogoAndShoot() {
+        // Animação da bala
+        bullet.style.opacity = '1';
+        bullet.style.left = '-100px';
+        bullet.animate([
+            { left: '-100px', opacity: 1, transform: 'scaleX(1)' },
+            { left: 'calc(100% + 150px)', opacity: 1, transform: 'scaleX(1.2)' }
+        ], { duration: 850, easing: 'cubic-bezier(0.2, 0.9, 0.6, 1.1)' });
+
+        // Vaporização do texto: cada letra some com fumaça + efeito drift
+        const letters = document.querySelectorAll('.sniper-logo span');
+        if (letters.length === 0) {
+            // Caso não tenha span, reconstruir com spans
+            const logoText = document.getElementById('logoElite');
+            const text = logoText.innerText;
+            logoText.innerHTML = '';
+            text.split('').forEach((ch, idx) => {
+                const sp = document.createElement('span');
+                sp.textContent = ch;
+                sp.style.display = 'inline-block';
+                sp.style.transition = 'all 0.2s';
+                logoText.appendChild(sp);
+            });
+        }
+        const finalSpans = document.querySelectorAll('.sniper-logo span');
+        finalSpans.forEach((span, index) => {
+            setTimeout(() => {
+                span.style.transform = `translateY(${Math.random() * 70 - 35}px) translateX(${Math.random() * 60 - 30}px) rotate(${Math.random() * 180 - 90}deg)`;
+                span.style.opacity = '0';
+                span.style.filter = 'blur(5px)';
+            }, index * 40);
         });
-    </script>
+
+        spawnRain(28); // Chuva de notas intensa
+        
+        // Após a vaporização, restaurar o logo com fade-in
+        setTimeout(() => {
+            finalSpans.forEach(span => {
+                span.style.transform = 'translateY(0px) translateX(0px) rotate(0deg)';
+                span.style.opacity = '1';
+                span.style.filter = 'blur(0px)';
+            });
+            bullet.style.opacity = '0';
+            bullet.style.left = '-200px';
+        }, 1300);
+    }
+
+    // Inicializar logo com spans para animação
+    function initLogoSpans() {
+        const logoElem = document.getElementById('logoElite');
+        const original = logoElem.innerText;
+        logoElem.innerHTML = '';
+        for (let char of original) {
+            const spanChar = document.createElement('span');
+            spanChar.textContent = char;
+            spanChar.style.transition = 'all 0.2s cubic-bezier(0.2, 1, 0.4, 1)';
+            logoElem.appendChild(spanChar);
+        }
+    }
+    initLogoSpans();
+    
+    logo.addEventListener('click', () => vaporizeLogoAndShoot());
+    setInterval(() => vaporizeLogoAndShoot(), 15000);
+    
+    // Efeito de fade in nos cards
+    const cards = document.querySelectorAll('.method-card, .chart-container, .report-premium, .cta-betting');
+    cards.forEach((el, idx) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(18px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.5s ease';
+        setTimeout(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+        }, idx * 100);
+    });
+</script>
 </body>
 </html>
-
